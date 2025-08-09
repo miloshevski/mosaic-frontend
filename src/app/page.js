@@ -459,7 +459,7 @@ export default function Home() {
                 )}
                 {!targetPreview && !resultUrl && (
                   <div className="text-sm text-slate-500">
-                    Качи слики од левата страна за преглед и резултат.
+                    Upload images to see the preview here.
                   </div>
                 )}
               </>
