@@ -20,7 +20,8 @@ export default function Home() {
   const [resultUrl, setResultUrl] = useState(null);
   const [error, setError] = useState(null);
 
-  const apiBase = process.env.NEXT_PUBLIC_API_BASE;
+  const apiBase = process.env.NEXT_PUBLIC_API_URL;
+
   const abortRef = useRef(null);
 
   // ------- Helpers -------
