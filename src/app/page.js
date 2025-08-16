@@ -176,25 +176,33 @@ export default function Home() {
   // ------- UI -------
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 text-slate-900">
-      <header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/90 border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">
-            🧩 Photo Mosaic (OpenCV)
-          </h1>
-          <div className="flex items-center gap-4 text-sm text-slate-600">
+      <header className=" top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-gradient-to-r from-indigo-50 to-white/90 border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          {/* Title + subtitle */}
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-indigo-700 flex items-center gap-2">
+              🧩 Photo Mosaic
+            </h1>
+            <p className="text-sm text-slate-600">
+              Генерирај мозаик од твоите слики со помош на OpenCV
+            </p>
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-4 text-sm">
             <button
               type="button"
               onClick={() => setShowGuide((s) => !s)}
-              className="rounded-lg px-3 py-1.5 bg-slate-100 hover:bg-slate-200 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 bg-indigo-600 text-white font-medium shadow-sm hover:bg-indigo-700 transition-colors"
               aria-expanded={showGuide}
               aria-controls="guide"
               title="Прикажи/Скриј упатство"
             >
-              {showGuide ? "Скриј упатство" : "Покажи упатство"}
+              {showGuide ? "❌ Скриј упатство" : "📖 Упатство"}
             </button>
-            <div>
+            <div className="hidden sm:block text-slate-600">
               API:{" "}
-              <code className="px-1 py-0.5 rounded bg-slate-200/60">
+              <code className="px-2 py-1 rounded-md bg-slate-200/60 text-slate-800">
                 {apiBase || "not set"}
               </code>
             </div>
