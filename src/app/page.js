@@ -20,6 +20,8 @@ export default function Home() {
   const [resultUrl, setResultUrl] = useState(null);
   const [error, setError] = useState(null);
 
+  const [showGuide, setShowGuide] = useState(true); // NEW: toggle for the guide
+
   const apiBase = process.env.NEXT_PUBLIC_API_URL;
 
   const abortRef = useRef(null);
@@ -179,14 +181,137 @@ export default function Home() {
           <h1 className="text-xl sm:text-2xl font-semibold tracking-tight">
             🧩 Photo Mosaic (OpenCV)
           </h1>
-          <div className="text-sm text-slate-600">
-            API:{" "}
-            <code className="px-1 py-0.5 rounded bg-slate-200/60">
-              {apiBase || "not set"}
-            </code>
+          <div className="flex items-center gap-4 text-sm text-slate-600">
+            <button
+              type="button"
+              onClick={() => setShowGuide((s) => !s)}
+              className="rounded-lg px-3 py-1.5 bg-slate-100 hover:bg-slate-200 transition-colors"
+              aria-expanded={showGuide}
+              aria-controls="guide"
+              title="Прикажи/Скриј упатство"
+            >
+              {showGuide ? "Скриј упатство" : "Покажи упатство"}
+            </button>
+            <div>
+              API:{" "}
+              <code className="px-1 py-0.5 rounded bg-slate-200/60">
+                {apiBase || "not set"}
+              </code>
+            </div>
           </div>
         </div>
       </header>
+
+      {/* NEW: Guide / How-to section */}
+      <section
+        id="guide"
+        className={`transition-all duration-300 ${
+          showGuide
+            ? "max-h-[9999px] opacity-100"
+            : "max-h-0 opacity-0 overflow-hidden"
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-4 pt-4">
+          <div className="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-5">
+            <h2 className="text-lg font-semibold mb-2">
+              Упатство: како се користи
+            </h2>
+            <ol className="list-decimal pl-5 space-y-3 text-sm text-slate-700">
+              <li>
+                <span className="font-medium">Target image</span> — постави ја
+                главната слика што сакаш да се претвори во мозаик. Може drag &
+                drop или преку копчето. По избор ќе видиш <em>преглед</em>.
+              </li>
+              <li>
+                <span className="font-medium">Tiles</span> — постави „плочки“
+                (малите слики што ќе го сочинуваат мозаикот). Има две опции:
+                <ul className="list-disc pl-5 mt-1 space-y-1">
+                  <li>
+                    <span className="font-medium">Option 1: ZIP</span> — качи{" "}
+                    <code>.zip</code> со многу слики внатре (препорачано за
+                    голем број плочки).
+                  </li>
+                  <li>
+                    <span className="font-medium">
+                      Option 2: Multiple images
+                    </span>{" "}
+                    — избери повеќе слики одеднаш. Ќе се прикажат првите 8 како
+                    преглед.
+                  </li>
+                </ul>
+                Забелешка: Ако избереш ZIP, изборот на „multiple images“ се
+                чисти, и обратно — секогаш важи само едната опција.
+              </li>
+              <li>
+                <span className="font-medium">Tile size</span> — големина на
+                секоја плочка (во px). Помала вредност = повеќе плочки, повеќе
+                детали, но подолга обработка. Поголема вредност = покрупни
+                плочки, побрза обработка.
+              </li>
+              <li>
+                <span className="font-medium">Blend</span> — колку оригиналната{" "}
+                <em>target</em> слика да се „вмеша“ над плочките (0 = без
+                мешање, 1 = само таргет). Типично 0.10–0.25 дава добар баланс.
+              </li>
+              <li>
+                <span className="font-medium">Max width</span> — максимална
+                ширина на конечната слика. Поголема ширина = поголема резолуција
+                и поголем фајл.
+              </li>
+              <li>
+                <span className="font-medium">No immediate repeat</span> — ако е
+                вклучено, иста плочка нема да се појави една до друга
+                (хоризонтално/вертикално), за поприроден изглед.
+              </li>
+              <li>
+                <span className="font-medium">Build mosaic</span> — ја стартува
+                обработката кон API (<code>/api/mosaic</code>). Ќе видиш прогрес
+                лента. <span className="font-medium">Cancel</span> ја откажува
+                активната обработка. <span className="font-medium">Reset</span>{" "}
+                ги чисти сите полиња и прегледи.
+              </li>
+              <li>
+                <span className="font-medium">Preview</span> — десно ќе се
+                прикаже таргетот и резултатот (кога ќе биде готов). Можеш да{" "}
+                <span className="font-medium">преземеш</span> (Download) или да{" "}
+                <span className="font-medium">отвориш во нов таб</span>.
+              </li>
+              <li>
+                <span className="font-medium">Грешки</span> — ако недостига
+                таргет или плочки, ќе добиеш порака (пример: „Постави target
+                слика!“ или „Додај ZIP или повеќе слики за плочки.“).
+              </li>
+            </ol>
+            <div className="mt-4 grid sm:grid-cols-2 gap-3 text-xs">
+              <div className="rounded-lg bg-slate-50 p-3 ring-1 ring-slate-200">
+                <p className="font-semibold mb-1">Минимум за старт</p>
+                <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                  <li>1 × Target image</li>
+                  <li>
+                    ZIP со слики <span className="italic">или</span> повеќе
+                    слики (Tiles)
+                  </li>
+                </ul>
+              </div>
+              <div className="rounded-lg bg-slate-50 p-3 ring-1 ring-slate-200">
+                <p className="font-semibold mb-1">Совети</p>
+                <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                  <li>Повеќе и разновидни плочки = подобар мозаик</li>
+                  <li>
+                    <span className="font-medium">Blend</span> ~0.12–0.20 за
+                    фини детали
+                  </li>
+                  <li>
+                    Ако резултатот е премногу „квадратест“, намали{" "}
+                    <span className="font-medium">Tile size</span> или зголеми{" "}
+                    <span className="font-medium">Max width</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="max-w-6xl mx-auto px-4 py-6 grid lg:grid-cols-2 gap-6">
         {/* Left: Form card */}
